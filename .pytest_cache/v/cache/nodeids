@@ -1,0 +1,3 @@
+[
+  "services/sample-service/tests/test_app.py::test_index_response"
+]
