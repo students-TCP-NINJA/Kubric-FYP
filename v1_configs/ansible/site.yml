@@ -1,0 +1,5 @@
+- name: Kubric baseline provisioning
+  hosts: kubric_nodes
+  become: true
+  roles:
+    - common

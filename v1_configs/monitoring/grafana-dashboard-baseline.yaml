@@ -1,0 +1,26 @@
+dashboard_baseline:
+  title: "Kubric Unified Operations Dashboard"
+  panels:
+    - name: "API Throughput"
+      datasource: "Prometheus"
+      query: "sum(rate(http_requests_total{job='kubric-api-gateway'}[5m]))"
+
+    - name: "API Error Rate (%)"
+      datasource: "Prometheus"
+      query: "100 * sum(rate(http_requests_total{status=~'5..',job='kubric-api-gateway'}[5m])) / sum(rate(http_requests_total{job='kubric-api-gateway'}[5m]))"
+
+    - name: "p95 Latency"
+      datasource: "Prometheus"
+      query: "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job='kubric-api-gateway'}[5m]))"
+
+    - name: "Node CPU Utilization"
+      datasource: "Prometheus"
+      query: "avg by (instance) (rate(node_cpu_seconds_total{mode!='idle'}[5m]))"
+
+    - name: "Security Alerts by Severity"
+      datasource: "OpenSearch"
+      query: "severity:*"
+
+    - name: "Incident Volume (24h)"
+      datasource: "PostgreSQL"
+      query: "SELECT date_trunc('hour', created_at) AS t, count(*) AS incidents FROM incidents WHERE created_at > now() - interval '24 hours' GROUP BY t ORDER BY t"

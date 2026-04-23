@@ -1,0 +1,46 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: default-receiver
+  group_by: ["alertname", "team", "severity"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+
+  routes:
+    - matchers:
+        - severity="critical"
+      receiver: critical-receiver
+      continue: true
+
+    - matchers:
+        - team="soc"
+      receiver: soc-receiver
+
+    - matchers:
+        - team="noc"
+      receiver: noc-receiver
+
+receivers:
+  - name: default-receiver
+    email_configs:
+      - to: "ops@kubric.local"
+        send_resolved: true
+
+  - name: critical-receiver
+    email_configs:
+      - to: "oncall-critical@kubric.local"
+        send_resolved: true
+    webhook_configs:
+      - url: "http://kubric-api-gateway-svc.kubric-prod/alerts/critical"
+
+  - name: soc-receiver
+    email_configs:
+      - to: "soc@kubric.local"
+        send_resolved: true
+
+  - name: noc-receiver
+    email_configs:
+      - to: "noc@kubric.local"
+        send_resolved: true

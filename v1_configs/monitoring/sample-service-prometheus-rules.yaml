@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: sample-service-alerts
+  labels:
+    role: alert-rules
+spec:
+  groups:
+  - name: sample-service.rules
+    rules:
+    - alert: SampleServiceHighErrorRate
+      expr: |
+        (increase(http_requests_total{job="sample-service",status=~"5.."}[5m]) /
+         increase(http_requests_total{job="sample-service"}[5m])) > 0.05
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High HTTP 5xx error rate for sample-service"
+        description: "Error rate for sample-service is >5% over the last 5 minutes."

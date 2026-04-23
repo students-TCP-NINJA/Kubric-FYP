@@ -1,0 +1,13 @@
+@startuml
+title SOC Operations Flow
+
+rectangle "EDR/ITDR/NDR/CDR/SDR Events" as E
+rectangle "Normalization and Enrichment" as N
+rectangle "Wazuh SIEM" as S
+rectangle "XDR Correlation" as X
+rectangle "Alert Prioritization" as A
+rectangle "Response Playbooks" as R
+rectangle "Forensics and RCA" as F
+
+E --> N --> S --> X --> A --> R --> F
+@enduml

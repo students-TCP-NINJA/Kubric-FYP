@@ -1,0 +1,8 @@
+flowchart LR
+    E["Events: EDR | ITDR | NDR | CDR | SDR"] --> N["Normalize + Enrich"]
+    N --> S["Wazuh SIEM"]
+    S --> X["XDR Correlation"]
+    X --> A["Prioritize Alerts"]
+    A --> R["Automated + Manual Response"]
+    R --> F["Forensics + RCA"]
+    F --> I["Control Improvements"]

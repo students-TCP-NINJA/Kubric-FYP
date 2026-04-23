@@ -1,0 +1,38 @@
+wazuh_rules:
+  - id: 100001
+    level: 10
+    description: "Multiple failed login attempts - possible brute force"
+    condition:
+      event_type: "auth_failure"
+      threshold:
+        count: 10
+        within_seconds: 300
+    response:
+      - action: "alert_soc"
+      - action: "lock_account"
+      - action: "add_ip_to_blocklist"
+
+  - id: 100002
+    level: 12
+    description: "Privilege escalation outside approved window"
+    condition:
+      event_type: "privilege_change"
+      validation: "no_active_jit_approval"
+    response:
+      - action: "alert_soc"
+      - action: "revoke_session"
+      - action: "open_incident"
+
+  - id: 100003
+    level: 14
+    description: "Potential data exfiltration detected"
+    condition:
+      event_type: "network_transfer"
+      threshold:
+        bytes: 107374182400 # 100 GB
+        within_seconds: 3600
+      destination: "external_untrusted"
+    response:
+      - action: "alert_soc"
+      - action: "isolate_endpoint"
+      - action: "trigger_forensic_capture"

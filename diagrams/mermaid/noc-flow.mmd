@@ -1,0 +1,7 @@
+flowchart LR
+    D["Network Devices and Services"] --> C["SNMP/Flow/Syslog Collection"]
+    C --> A["Analysis + Baselines"]
+    A --> L["Alerting"]
+    L --> T["NOC Triage"]
+    T --> M["Mitigation and Recovery"]
+    M --> P["Post-Incident Review"]

@@ -1,0 +1,23 @@
+{
+  "index_patterns": ["kubric-logs-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 6,
+      "number_of_replicas": 1,
+      "refresh_interval": "10s"
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "service": { "type": "keyword" },
+        "environment": { "type": "keyword" },
+        "severity": { "type": "keyword" },
+        "message": { "type": "text" },
+        "trace_id": { "type": "keyword" },
+        "host": { "type": "keyword" },
+        "source_ip": { "type": "ip" }
+      }
+    }
+  },
+  "priority": 100
+}

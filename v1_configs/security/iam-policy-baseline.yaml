@@ -1,0 +1,34 @@
+iam_policy_baseline:
+  authentication:
+    mfa_required_for:
+      - admin_roles
+      - production_access
+      - vpn_access
+    allowed_methods:
+      - totp
+      - hardware_token
+      - oauth2_sso
+
+  authorization:
+    model: rbac
+    principles:
+      - least_privilege
+      - separation_of_duties
+      - just_in_time_elevation
+
+  session:
+    max_session_duration_minutes: 480
+    idle_timeout_minutes: 30
+    reauth_required_for_sensitive_actions: true
+
+  access_reviews:
+    frequency: monthly
+    owners:
+      - security_team
+      - service_owners
+
+  logging:
+    auth_events: true
+    admin_actions: true
+    failed_access: true
+    retention_days: 365

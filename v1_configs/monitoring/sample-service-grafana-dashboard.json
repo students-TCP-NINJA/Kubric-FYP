@@ -1,0 +1,36 @@
+{
+  "annotations": {"list":[]},
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "HTTP Requests (sample-service)",
+      "targets": [
+        {
+          "expr": "sum(rate(http_requests_total{job=\"sample-service\"}[5m]))",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"h":8,"w":24,"x":0,"y":0}
+    },
+    {
+      "type": "timeseries",
+      "title": "Error Rate (5m)",
+      "targets": [
+        {
+          "expr": "(increase(http_requests_total{job=\"sample-service\",status=~\"5..\"}[5m]) / increase(http_requests_total{job=\"sample-service\"}[5m])) * 100",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"h":8,"w":24,"x":0,"y":8}
+    }
+  ],
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": ["sample-service"],
+  "title": "sample-service - Overview",
+  "uid": "sample-service-overview",
+  "version": 1
+}

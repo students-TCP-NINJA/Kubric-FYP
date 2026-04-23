@@ -1,0 +1,9 @@
+flowchart TD
+    SRC["Apps / Agents / Sensors"] --> ING["Ingestion"]
+    ING --> INT["Integration Layer"]
+    INT --> PG["PostgreSQL"]
+    INT --> TS["TimescaleDB"]
+    INT --> OS["OpenSearch"]
+    TS --> WH["Warehouse"]
+    PG --> RC["Redis Cache"]
+    WH --> DASH["Dashboards and Reports"]

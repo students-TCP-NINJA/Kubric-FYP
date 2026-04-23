@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubric-api-gateway
+  namespace: kubric-prod
+  labels:
+    app: kubric-api-gateway
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kubric-api-gateway
+  template:
+    metadata:
+      labels:
+        app: kubric-api-gateway
+    spec:
+      serviceAccountName: kubric-service-account
+      containers:
+        - name: api-gateway
+          image: ghcr.io/students-tcp-ninja/kubric-api-gateway:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENVIRONMENT
+              value: production
+            - name: LOG_LEVEL
+              value: info
+            - name: RATE_LIMIT_RPS
+              value: "1000"
+            - name: JWT_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: kubric-secrets
+                  key: jwt_issuer
+            - name: JWT_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: kubric-secrets
+                  key: jwt_audience
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubric-api-gateway-svc
+  namespace: kubric-prod
+spec:
+  selector:
+    app: kubric-api-gateway
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP

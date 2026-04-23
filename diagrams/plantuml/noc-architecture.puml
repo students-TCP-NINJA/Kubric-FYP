@@ -1,0 +1,13 @@
+@startuml
+title NOC Operations Flow
+
+rectangle "Devices and Services" as D
+rectangle "Collection (SNMP/Flow/Syslog)" as C
+rectangle "Analysis and Baselines" as A
+rectangle "Alerting" as L
+rectangle "NOC Triage" as T
+rectangle "Mitigation and Recovery" as M
+rectangle "Post-Incident Review" as P
+
+D --> C --> A --> L --> T --> M --> P
+@enduml

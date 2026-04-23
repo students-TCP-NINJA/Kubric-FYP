@@ -1,0 +1,32 @@
+name: CI/CD - sample-service
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r services/sample-service/requirements.txt
+        pip install pytest
+    - name: Run tests
+      run: |
+        pytest -q services/sample-service/tests
+    - name: Run lint
+      run: |
+        pip install flake8 || true
+        flake8 services/sample-service || true
+    - name: Build Docker image
+      run: |
+        docker build -t sample-service:latest services/sample-service

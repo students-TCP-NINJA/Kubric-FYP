@@ -1,0 +1,18 @@
+@startuml
+title Kubric 7-Tier Architecture
+
+rectangle "Tier 7: Presentation" as T7
+rectangle "Tier 6: Service" as T6
+rectangle "Tier 5: AI/ML" as T5
+rectangle "Tier 4: Integration" as T4
+rectangle "Tier 3: Security" as T3
+rectangle "Tier 2: Data" as T2
+rectangle "Tier 1: Infrastructure" as T1
+
+T7 --> T6
+T6 --> T5
+T5 --> T4
+T4 --> T3
+T3 --> T2
+T2 --> T1
+@enduml
